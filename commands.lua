@@ -1,4 +1,4 @@
-
+dofile("rcserver.lua")
 dofile("help.lua")
 dofile("ignore.lua")
 dofile("identify.lua") --Erase if you don't want the bot to identify.
