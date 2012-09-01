@@ -68,11 +68,11 @@ dofile("commands.lua")
 -- ]]--
 
 
---coroutine_rcserver=coroutine.create(rcserver()) --Not tested fully.
+coroutine_rcserver=coroutine.create(rcserver) --Not tested fully.
 while true do
 irc:think()
 irc:send("PING irc.freenode.net MitchAnnouncer")
 irc:hook("OnChat","Called whan player chats",chat)
 sleep(2.5)
---coroutine.resume(coroutine_rcserver)
+coroutine.resume(coroutine_rcserver)
 end
