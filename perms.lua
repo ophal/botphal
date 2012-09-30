@@ -1,6 +1,5 @@
     perms={}
     perms.wolfmitchell=100
-    perms.mniip=50
 	perms.Zora=100
 	perms.Necro=100
 	perms.jordanmkasla2009=90
@@ -22,10 +21,13 @@
 
     function permscheck(nick,cmd)
             lvl2=getlvl(cmd)
-
+			if(perms[nick]) then
             log_write("[Command] "..nick.." "..lvl2.." "..perms[nick].." "..cmd)
-            return (perms[nick] or
-            0) >= lvl2
+            return (perms[nick] or 0) >= lvl2
+			else
+			return false
+			end
+			--if(perms[nick] == lvl2) then return true else return false end
     end
 
 

@@ -25,14 +25,14 @@ function chat(usr,channel,msg)
             elseif not run then
                 irc:sendChat(channel,"You do not have the required permissions!")
             end
-        elseif msg:sub(1,5) == "+kill" then
+--[[	    elseif msg:sub(1,5) == "+kill" then
 		    killparams=splitString(msg," ")
             run=permscheck(usr.nick,"kill")
             if run == true then
                 irc:send("KILL "..killparams[2].." " ..killparams[3] )
             elseif not run then
 				irc:sendChat(channel,"You do not have the required permissions!")
-            end
+            end]]
 		elseif msg:sub(1,4) == "+lua" then
 			codea = splitString(msg," ")
             codeb = ""
@@ -55,8 +55,12 @@ function chat(usr,channel,msg)
                             elseif not type(r)== "string" then
 							    returned=returned.."[Script returned a "..type(r).."]"
 							else
-				    			returned=returned..r
+						    if r then
+							returned=returned..r
+							else
+							returned=returned.."[Nothing returned!]"
 					    	end
+							end
                         end
                     irc:sendChat(channel,returned)
                 elseif not run then

@@ -1,6 +1,6 @@
 dofile("irc/init.lua")
 user = {}
-user.nick = "OphalBot"
+user.nick = "OphalBot_"
 user.username = "LuaBot"
 user.realname = "Announce bot written by Mitchell Monahan"
 irc=irc.new(user)

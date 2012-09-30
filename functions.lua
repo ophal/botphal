@@ -52,3 +52,12 @@ end
 print(a)
 end
 end --Again, from mniip
+function getkeys(random)
+    s={}
+	s.text=""
+	for k,v in pairs(random) do
+        s.type=type(random[k])
+		s.text=s.text..s.type.." "..k.."|"
+	end
+	return s.text
+end
