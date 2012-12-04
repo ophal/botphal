@@ -1,42 +1,65 @@
 dofile("irc/init.lua")
+dofile("functions.lua")
+if exists("config.lua") then dofile("config.lua") else error "I don't think you got the config.lua (Or I was not able to find it)" end
+if not config then error "Did you just create a blank config.lua?!?!?! We have it in the git repo." end
+if config.die then error "You might want to edit config.lua..." end
+if not config.serverPort then error "Edit the config file" end
+if not config.server then error "Edit the config.lua." end
+if not config.autorun then error "Edit the config.lua." end
+if not config.channels then error "Edit the config.lua." end
+if not config.enabledCommands then error "Edit the config.lua." end
+if not config.nick then error "Edit the config.lua." end
+if not config.username then error "Edit the config.lua" end
+if not config.realname then error "Edit the config.lua" end
+if not config.factoids then error "Edit the config.lua"
+elseif config.factoids.enabled == "true" then
+    if not config.factoids.db then
+	   error "You are missing a config.factoids.db config option. (Block: factoids)"
+	end
+end
+
 user = {}
-user.nick = "MitchBot_"
-user.username = "MitchBot"
-user.realname = "Some random bot written by Mitchell Monahan"
+user.nick = config.nick
+user.username = config.username
+user.realname = config.realname
 irc=irc.new(user)
-irc:connect("irc.esper.net",6667,"irc.esper.net")
+irc:connect(config.server,config.serverPort,config.server)
 local sleep=require "socket".sleep
 irc:send("NOTICE wolfmitchell :Connected!")
-print("Note that MitchAnnouncer was designed for use by BotServ,")
-print("which is in the Anope services package.")
-print("Connected to irc.esper.net")
-for i=1,25 do
-irc:think()
+print("Connected to "..config.serverPort)
+
+for i=1,50 do
+    irc:think()
 end
---irc:send("OPER LuaBot fusebox1")
-irc:join("#ccbots")
+---
+sleep(5)
 
+for i=1,#config.autorun do
+    if config.autorun[i] then
+	    irc:send(config.autorun[i])
+		sleep(0.2)
+	end
+end
 
-dofile("functions.lua")
+for i=1,#config.channels do
+    if config.channels[i] then
+        irc:join(config.channels[i]
+    end
+end
 
 ---
 irc:think()
 dofile("perms.lua")
 dofile("sandbox.lua")
-for i=1,10 do
--- irc:send("samode #irc4cpu +v "..user.nick)
-end
 
 -- --[[
 dofile("commands.lua")
 -- ]]--
 
-coroutine_rcserver=coroutine.create(rcserver) --Not tested fully.
+
 while true do
 irc:think()
-irc:send("PING irc.esper.net MitchAnnouncer")
-irc:hook("OnChat","Called whan a person chats",chat)
-irc:hook("OnCtcp","Called when a person sends a CTCP message",ctcp)
+irc:send("PING irc.freenode.net MitchAnnouncer")
+irc:hook("OnChat","Called whan player chats",chat)
 sleep(2.5)
-coroutine.resume(coroutine_rcserver)
 end

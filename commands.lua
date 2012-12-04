@@ -1,8 +1,8 @@
 --
- dofile("rcserver.lua")
 dofile("help.lua")
 dofile("ignore.lua")
 dofile("identify.lua") --Erase if you don't want the bot to identify.
+if factoids then facts = config.factoids.db end
 function chat(usr,channel,msg)
    --if checkIgnore(usr.nick) == nil then
    --if msg:sub(1,1)=="+" then --Thank mniip from IRC for telling me about this :D
@@ -81,8 +81,10 @@ function chat(usr,channel,msg)
 						if e == nil then
 					        if s==nil then
 						        returned=returned.."[Nothing returned!]"
-						    else
+						    elseif type(s)=="string" then
 						        returned=returned..s
+							else
+							    returned=returned.."Your code returned a "..type(s)
 							end
 						end
 					end
@@ -153,11 +155,57 @@ function chat(usr,channel,msg)
 						end
 					end
 				end
-			else
-
+		elseif msg:sub(1,4) == "+api" then
+		    irc:sendChat(channel,"API is currently not implemented. Sorry D:")
+			irc:sendChat(channel,"Planned commands for +api are addroster, remroster, genkey, rmkey, docs, listroster, getaddr, status")
+			irc:sendChat(channel,"The API is going to be XMPP based and the server SHOULD be running on the same machine as the bot.")
+			irc:sendChat(channel,"The bot should also be in the user mitchbotapi@[server address] by default.")
+			irc:sendChat(channel,"API Progress: 0%")
+		else
             irc:sendChat(channel,"Sorry, that is not a valid command.")
         end
     end
 	end
+	if factoids then
+	if msg:sub(1,1) == "&" then
+	    for k,v in pairs(facts) do
+		    if msg:sub(2,#msg) == k then
+                sendText = v
+			end
+		end
+		if not sendText then
+		    irc:send("NOTICE "..usr.nick.." :Unknown fact.")
+		else
+		    irc:sendChat(channel,sendText)
+		end
+	end
+	end
     log_write("["..channel.."] <"..usr.nick.."> "..msg)
+end
+function ctcp(usr, chan, msg)
+  local response, command, ts
+  local ctcpresponses = {
+    VERSION = "MitchBot v0.20",
+    CREDITS = "Started development by wolfmitchell (on freenode IRC), develCuy and mniip helped with alot of it also :D (Thank develCuy for helping with ctcp :D)",
+    OWNER = "wolfmitchell", --Change depending on who the owner of the bot is :P
+    FINGER = "He thought his life was going to take a turn for the better, but I knew the only turns one makes in life are the ones that take you the wrong way down a one-way street to nowhere, where U-turns aren't permitted before 8PM except for city buses.",
+    TIME = os.date([[%a %b %d %H:%M:%S %Y]], os.time()),
+    PING = nil, -- gets calculated below
+    CLIENTINFO = [[VERSION CREDITS OWNER FINGER TIME PING CLIENTINFO]],
+  }
+
+  if msg:byte(1,1) == 1 or msg:sub(1,1) == string.char(0x01) then
+    if msg:byte(#msg, #msg) == 1 or msg:sub(#msg, #msg) == string.char(0x01) then
+      command = msg:sub(2, #msg - 1)
+      if ctcpresponses[command] then
+        response = ":\1".. command .. " " .. ctcpresponses[command] .. "\1"
+      elseif command:sub(1, 4) == [[PING]] then
+        response = ":\1PING " .. command:sub(6, #command) .."\1"
+  --      response = ":\1PING " .. os.time() .."\1"
+      end
+      if response then
+        irc:send("NOTICE " .. usr.nick .. " " .. response)
+      end
+    end
+  end
 end
