@@ -26,7 +26,7 @@ irc=irc.new(user)
 irc:connect(config.server,config.serverPort,config.server)
 local sleep=require "socket".sleep
 irc:send("NOTICE wolfmitchell :Connected!")
-print("Connected to "..config.serverPort)
+print("Connected to "..config.server)
 
 for i=1,50 do
     irc:think()
