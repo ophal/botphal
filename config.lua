@@ -86,14 +86,14 @@ config = {}
 	  * config.factoids.enabled
 	  * Enables or disables factoids.
 	  * ]]--
-    -- config.factoids.enabled = true,
+    -- enabled = true,
 
 
     --[[
       * config.factoids.db
 	  * A table of factoids the bot can use.
 	  * ]]--
-	-- config.factoids.db = {
+	-- db = {
 	   -- factoid1 = "This is a sample factoid.",
 	   -- factoid2 = "This is another sample factoid."
 	-- }
