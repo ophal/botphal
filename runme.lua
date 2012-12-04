@@ -43,7 +43,7 @@ end
 
 for i=1,#config.channels do
     if config.channels[i] then
-        irc:join(config.channels[i]
+        irc:join(config.channels[i])
     end
 end
 
