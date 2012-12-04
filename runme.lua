@@ -7,7 +7,7 @@ if not config.serverPort then error "Edit the config file" end
 if not config.server then error "Edit the config.lua." end
 if not config.autorun then error "Edit the config.lua." end
 if not config.channels then error "Edit the config.lua." end
-if not config.enabledCommands then error "Edit the config.lua." end
+--if not config.enabledCommands then error "Edit the config.lua." end
 if not config.nick then error "Edit the config.lua." end
 if not config.username then error "Edit the config.lua" end
 if not config.realname then error "Edit the config.lua" end

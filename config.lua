@@ -31,7 +31,7 @@ config = {}
   * config.channels
   * A table containing strings of text containing the names of channels to autojoin.
   * ]]--
---config.autorun = {
+--config.channels = {
 --    "#channel1",
 --    "#channel2",
 --    "#channel3"
@@ -86,7 +86,7 @@ config = {}
 	  * config.factoids.enabled
 	  * Enables or disables factoids.
 	  * ]]--
-    -- config.factoids.enabled = true
+    -- config.factoids.enabled = true,
 
 
     --[[
