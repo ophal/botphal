@@ -39,7 +39,7 @@ for i=1,#config.autorun do
 		sleep(0.2)
 end
 
-for i=1,#config.channels doa
+for i=1,#config.channels do
     if config.channels[i] then
         irc:join(config.channels[i])
 		sleep(0.2)
