@@ -1,22 +1,3 @@
---
-function irc:sendChat(target, msg)
-	-- Split the message into segments if it includes newlines.
-	if target:sub(1,1) == "#" then
-	for line in msg:gmatch("([^\r\n]+)") do
-		irc:send("PRIVMSG %s :%s", verify(target, 3), line)
-	end
-	else irc:sendNotice(target,msg) end
-end
-
-function verify(str, errLevel)
-	if str:find("^:") or str:find("%s%z") then
-		error(("malformed parameter '%s' to irc command"):format(str), errLevel)
-	end
-
-	return str
-end
-
-
 dofile("help.lua")
 dofile("ignore.lua")
 
