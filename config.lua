@@ -100,6 +100,14 @@ config = {}
 -- }
 
 --[[
+  * config.modules
+  * A table for modules in the modules/ folder. Put your module in a folder, with the script to run being 'init.lua'. Modules are ran in order of the table after we load commands.lua.
+  * ]]--
+-- config.modules = {
+    -- "example"
+-- }
+
+--[[
   * Remove the config.die :3 (it's value does not matter ;)
   * ]]--
 config.die = "asdf"
