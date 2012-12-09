@@ -58,7 +58,7 @@ dofile("commands.lua")
 for i=1,#config.modules do
     if exists("modules/"..config.modules[i].."/init.lua") then
 	    s,r=pcall(function() dofile("modules/"..config.modules[i].."/init.lua") end)
-		if s=false then
+		if s==false then
 		    print("ERROR: Module "..config.modules[i].." not loaded. Reason: failed execution. Lua error: "..r)
 		else
 		    print("MODLOAD: Module "..config.modules[i].." has been successfully loaded.")
