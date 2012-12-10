@@ -141,10 +141,10 @@ function list(usr,channel,msg)
 		    status = false
 		end
 	end
-	list=""
+	cmdlist=""
 	for i=1,#helpTable do
 	    data=splitString(helpTable[i],":")
-		list = list .. " " .. data[1]
+		cmdlist = cmdlist .. " " .. data[1]
 	end
 	irc:sendChat(channel,"["..usr.nick.."] "..list)
 end
