@@ -120,7 +120,7 @@ function reload(usr,channel,msg)
 		end
 	end
 end
-function help(usr,channel,msg)
+function chelp(usr,channel,msg)
 	params=splitString(msg," ")
     if params[2] == nil then
 	    irc:sendChat(channel,"["..usr.nick.."] Usage: +help <command>. Use +list for a command list.")
@@ -136,7 +136,7 @@ end
 function list(usr,channel,msg)
 	status=true
 	while status do
-	    helpTable=getCompleteTable()
+	    helpTable=help
 		if helpTable ~=nil then
 		    status = false
 		end
@@ -176,7 +176,7 @@ function chat(usr,channel,msg)
 			elseif msg:sub(1,4) == "+lua" then lua(usr,channel,msg)
 			elseif msg:sub(1,4) == "+run" then run(usr,channel,msg)
 			elseif msg:sub(1,7) == "+reload" then reload(usr,channel,msg)
-			elseif msg:sub(1,5) == "+help" then help(usr,channel,msg)
+			elseif msg:sub(1,5) == "+chelp" then help(usr,channel,msg)
 			elseif msg:sub(1,5) == "+list" then list(usr,channel,msg)
 			elseif msg:sub(1,4) == "+php" then php(usr,channel,msg)
 			else irc:sendChat(channel,"Sorry, that is not a valid command.")
