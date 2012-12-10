@@ -146,7 +146,7 @@ function list(usr,channel,msg)
 	    data=splitString(helpTable[i],":")
 		cmdlist = cmdlist .. " " .. data[1]
 	end
-	irc:sendChat(channel,"["..usr.nick.."] "..list)
+	irc:sendChat(channel,"["..usr.nick.."] "..cmdlist)
 end
 function php(usr,channel,msg)
 	params=splitString(msg," ")
