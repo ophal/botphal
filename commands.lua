@@ -24,10 +24,8 @@ end
 function say(usr,channel,msg)
     announcement = splitString(msg," ")
 	textannounce = ""
-    for i=2, #announcement do
-		textannounce=textannounce .. " " .. announcement[i]
-    end
-    textannounce1="["..usr.nick.."] "..textannounce
+    textannounce=table.concat(announcement," ",2)
+    textannounce1=textannounce
 	irc:sendChat(channel,textannounce1)
 end
 function quit(usr,channel,msg)
@@ -125,11 +123,11 @@ function chelp(usr,channel,msg)
     if params[2] == nil then
 	    irc:sendChat(channel,"["..usr.nick.."] Usage: +help <command>. Use +list for a command list.")
 	else
-	    help=getHelpTable(params[2])
-	    if help == nil then
+	    helpl=getHelpTable(params[2])
+	    if helpl == nil then
 		    irc:sendChat(channel,"["..usr.nick.."] Sorry, no help documents were found on that command.")
 		else
-			irc:sendChat(channel,"["..usr.nick.."] "..help[1]..": "..help[2].."|| Syntax: "..help[3].."|| Requires user level "..help[4]..".")
+			irc:sendChat(channel,"["..usr.nick.."] "..helpl[1]..": "..helpl[2].."|| Syntax: "..helpl[3].."|| Requires user level "..helpl[4]..".")
 		end
 	end
 end
@@ -168,24 +166,41 @@ function php(usr,channel,msg)
 		end
 	end
 end
-function chat(usr,channel,msg)
-    if msg:sub(1,1) == "+" then
-	    if checkIgnore(usr.nick) == nil then
-		    if msg:sub(1,4) == "+say" then say(usr,channel,msg)
-			elseif msg:sub(1,5) == "+quit" then quit(usr,channel,msg)
-			elseif msg:sub(1,4) == "+lua" then lua(usr,channel,msg)
-			elseif msg:sub(1,4) == "+run" then run(usr,channel,msg)
-			elseif msg:sub(1,7) == "+reload" then reload(usr,channel,msg)
-			elseif msg:sub(1,5) == "+chelp" then help(usr,channel,msg)
-			elseif msg:sub(1,5) == "+list" then list(usr,channel,msg)
-			elseif msg:sub(1,4) == "+php" then php(usr,channel,msg)
-			else irc:sendChat(channel,"Sorry, that is not a valid command.")
-		end
-	end
-	log_write("["..channel.."] <"..usr.nick.."> "..msg)
-end
+function modlist(usr,channel,msg)
+    modulelist=table.concat(config.modules," ")
+	irc:sendChat(channel,modulelist)
 end
 
+enabled_commands = {}
+function chat(usr,channel,msg)
+    if msg:sub(1,1)=="+" and checkIgnore(usr.nick) == nil then
+	    message=splitString(msg," ")
+    	for k,v in pairs(enabled_commands) do
+	        if message[1] == k then v(usr,channel,msg) validcmd = true end
+    	end
+		if validcmd == false or validcmd == nil then irc:sendChat(channel,"Sorry, that is not a valid command.") end
+		validcmd = nil
+	end
+	log_write("["..channel.."] {"..os.date().."} <"..usr.nick.."> "..msg)
+end
+
+function addbotcommand(cmd,callfunc,enabledByDefault)
+    if enabledByDefault then
+	    enabled_commands[cmd]=callfunc
+		print("[ADDCMD] "..cmd)
+	else
+        if not config.enabledCommands[cmd] == nil then enabled_commands[cmd]=callfunc print("[ADDCMD] "..cmd) end
+	end
+end
+addbotcommand("+say",say,true)
+addbotcommand("+quit",quit,true)
+addbotcommand("+lua",lua,true)
+addbotcommand("+run",run,true)
+addbotcommand("+reload",reload,true)
+addbotcommand("+help",chelp,true)
+addbotcommand("+list",list,true)
+addbotcommand("+php",php,true)
+addbotcommand("+modlist",modlist,true)
 function ctcp(usr, chan, msg)
   local response, command, ts
   local ctcpresponses = {

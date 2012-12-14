@@ -26,7 +26,7 @@ user.realname = config.realname
 irc=irc.new(user)
 irc:connect(config.server,config.serverPort,config.server)
 local sleep=require "socket".sleep
-print("Connected to "..config.server)
+print("[CONNECT] "..config.server..":"..config.serverPort)
 
 for i=1,50 do
     irc:think()
@@ -59,20 +59,22 @@ for i=1,#config.modules do
     if exists("modules/"..config.modules[i].."/init.lua") then
 	    s,r=pcall(function() dofile("modules/"..config.modules[i].."/init.lua") end)
 		if s==false then
-		    print("ERROR: Module "..config.modules[i].." not loaded. Reason: failed execution. Lua error: "..r)
+		    print("[ERROR] Module "..config.modules[i].." not loaded. Reason: failed execution. Lua error: "..r)
 		else
-		    print("MODLOAD: Module "..config.modules[i].." has been successfully loaded.")
+		    print("[MODLOAD] Module "..config.modules[i].." has been successfully loaded.")
 		end
 	else
-	    print("WARNING: Module "..config.modules[i].." not loaded. Reason: not found.")
+	    print("[ERROR]: Module "..config.modules[i].." not loaded. Reason: not found.")
 	end
 end
-
-
+function chatpcalled(usr,channel,msg)
+    s,r = pcall(function() chat(usr,channel,msg) end)
+	if s == false then irc:sendChat(channel,"Error logged in console.") print("[ERROR] "..r) end
+end
 while true do
 irc:think()
 irc:send("PING irc.freenode.net MitchAnnouncer")
-irc:hook("OnChat","Called whan a person chats",chat)
+irc:hook("OnChat","Called whan a person chats",chatpcalled)
 irc:hook("OnChat","Called when a person chats",factoids)
 sleep(2.5)
 end
