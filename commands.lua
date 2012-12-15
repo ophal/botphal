@@ -132,19 +132,12 @@ function chelp(usr,channel,msg)
 	end
 end
 function list(usr,channel,msg)
-	status=true
-	while status do
-	    helpTable=help
-		if helpTable ~=nil then
-		    status = false
-		end
-	end
-	cmdlist=""
-	for i=1,#helpTable do
-	    data=splitString(helpTable[i],":")
-		cmdlist = cmdlist .. " " .. data[1]
+	cmdlist = ""
+	for k,v in pairs(enabled_commands) do
+	    cmdlist = cmdlist .. " ".. k
 	end
 	irc:sendChat(channel,"["..usr.nick.."] "..cmdlist)
+	cmdlist = nil
 end
 function php(usr,channel,msg)
 	params=splitString(msg," ")
