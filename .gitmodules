@@ -1,0 +1,4 @@
+[submodule 'irc']
+  path=irc
+  url=git://github.com/JakobOvrum/LuaIRC.git
+  
