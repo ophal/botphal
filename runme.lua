@@ -1,7 +1,7 @@
-dofile("irc/init.lua")
+dofile("LuaIRC/init.lua")
 dofile("functions.lua")
 if exists("config.lua") then dofile("config.lua") else error "I don't think you got the config.lua (Or I was not able to find it)" end
-if not (config or config.serverPort or config.server or config.autorun config.channels or config.enabledCommands or config.nick or config.username or config.realname or config.factoids) then error "Edit config.lua" end
+if not (config or config.serverPort or config.server or config.autorun or config.channels or config.enabledCommands or config.nick or config.username or config.realname or config.factoids) then error "Edit config.lua" end
 if config.factoids.enabled == "true" then
     if not config.factoids.db then
 	   error "You are missing a config.factoids.db config option. (Block: factoids)"
@@ -59,7 +59,14 @@ for i=1,#config.modules do
 end
 function chatpcalled(usr,channel,msg)
     s,r = pcall(function() chat(usr,channel,msg) end)
-	if s == false then irc:sendChat(channel,"Error logged in console.") print("[ERROR] "..r) end
+	if s == false then
+	    if channel:sub(1,1)=="#" then
+		    irc:sendChat(channel,"Error logged in console.")
+		else
+		    irc:sendChat(usr.nick,"Error logged in console.")
+		end
+	    print("[ERROR] "..r)
+	end
 end
 while true do
 irc:think()
