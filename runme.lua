@@ -1,4 +1,4 @@
-dofile("LuaIRC/init.lua")
+dofile("irc/init.lua")
 dofile("functions.lua")
 if exists("config.lua") then dofile("config.lua") else error "I don't think you got the config.lua (Or I was not able to find it)" end
 if not (config or config.serverPort or config.server or config.autorun or config.channels or config.enabledCommands or config.nick or config.username or config.realname or config.factoids) then error "Edit config.lua" end
