@@ -132,12 +132,12 @@ function chelp(usr,channel,msg)
 	end
 end
 function list(usr,channel,msg)
-	cmdlist = ""
-	for k,v in pairs(enabled_commands) do
-	    cmdlist = cmdlist .. " ".. k
+    if msg:sub(7,#msg) == (nil or "") then
+	    if channel:sub(1,1)=="#" then irc:sendChat(channel,"["..usr.nick.."] To list commands in a module, do +list <modulename>.   Modules: ".. table.concat(registered_modules," ")) else irc:sendChat(usr.nick,"["..usr.nick.."] To list commands in a module, do +list <modulename> .".. table.concat(registered_modules," ")) end
+	else
+	    local modulecmdlist = table.concat(module_commands[msg:sub(7,#msg)]," ")
+		if channel:sub(1,1)=="#" then irc:sendChat(channel,"["..usr.nick.."] Commands in "..msg:sub(7,#msg)..": "..modulecmdlist) else irc:sendChat(usr.nick,"["..usr.nick.."] Commands in "..msg:sub(7,#msg)..": "..modulecmdlist)  end
 	end
-	irc:sendChat(channel,"["..usr.nick.."] "..cmdlist)
-	cmdlist = nil
 end
 function php(usr,channel,msg)
 	params=splitString(msg," ")
@@ -160,7 +160,7 @@ function php(usr,channel,msg)
 	end
 end
 function modlist(usr,channel,msg)
-    modulelist=table.concat(config.modules," ")
+    modulelist=table.concat(registered_modules," ")
 	irc:sendChat(channel,modulelist)
 end
 
@@ -185,15 +185,16 @@ function addbotcommand(cmd,callfunc,enabledByDefault)
         if not config.enabledCommands[cmd] == nil then enabled_commands[cmd]=callfunc print("[ADDCMD] "..cmd) end
 	end
 end
-addbotcommand("+say",say,true)
-addbotcommand("+quit",quit,true)
-addbotcommand("+lua",lua,true)
-addbotcommand("+run",run,true)
-addbotcommand("+reload",reload,true)
-addbotcommand("+help",chelp,true)
-addbotcommand("+list",list,true)
-addbotcommand("+php",php,true)
-addbotcommand("+modlist",modlist,true)
+module_register("core")
+add_module_command("core","+say",say)
+add_module_command("core","+quit",quit)
+add_module_command("core","+lua",lua)
+add_module_command("core","+run",run)
+add_module_command("core","+reload",reload)
+add_module_command("core","+help",chelp)
+add_module_command("core","+list",list)
+add_module_command("core","+php",php)
+add_module_command("core","+modlist",modlist)
 function ctcp(usr, chan, msg)
   local response, command, ts
   local ctcpresponses = {

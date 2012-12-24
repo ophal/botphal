@@ -44,7 +44,16 @@ dofile("sandbox.lua")
 -- --[[
 dofile("commands.lua")
 -- ]]--
-
+registered_modules = {}
+module_commands = {}
+function module_register(modulename)
+    table.insert(registered_modules,modulename)
+	module_commands[modulename] = {}
+end
+function add_module_command(modulename,command,callback)
+    addbotcommand(command,callback,true)
+	table.insert(module_commands[modulename],command)
+end
 for i=1,#config.modules do
     if exists("modules/"..config.modules[i].."/init.lua") then
 	    s,r=pcall(function() dofile("modules/"..config.modules[i].."/init.lua") end)
