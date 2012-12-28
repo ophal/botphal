@@ -59,7 +59,7 @@ function lua(usr,channel,msg)
 			        returned=returned.."[Script returned a "..type(r).."]"
 				else
 				    if r then
-				    	r=string.gsub(r,"[\r,\n]","|NEWLINE|")
+				    	r=string.gsub(r,"[\r\n]","|NEWLINE|")
 						returned=returned..r
 						r = nil
 						else
