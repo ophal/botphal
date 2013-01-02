@@ -28,6 +28,58 @@ function say(usr,channel,msg)
     textannounce1=textannounce
 	irc:sendChat(channel,textannounce1)
 end
+table.insert(permscommands,"op:70")
+table.insert(permscommands,"deop:70")
+table.insert(permscommands,"voice:50")
+table.insert(permscommands,"devoice:50")
+function op(user,channel,msg)
+    if permscheck(usr.nick,"op") then
+	    if msg:sub(5,#msg) == nil or msg:sub(5,#msg) == "" then
+		    irc:send("MODE "..channel.." +o "..usr.nick)
+		else
+		    irc:send("MODE "..channel.." +o "..msg:sub(5,#msg)
+		end
+		irc:sendChat(channel,"Done.")
+	else
+	    irc:sendChat(channel,"You do not have the required permissions.")
+	end
+end
+function deop(user,channel,msg)
+    if permscheck(usr.nick,"deop") then
+	    if msg:sub(5,#msg) == nil or msg:sub(5,#msg) == "" then
+		    irc:send("MODE "..channel.." -o "..usr.nick)
+		else
+		    irc:send("MODE "..channel.." -o "..msg:sub(5,#msg)
+		end
+		irc:sendChat(channel,"Done.")
+	else
+	    irc:sendChat(channel,"You do not have the required permissions.")
+	end
+end
+function voice(user,channel,msg)
+    if permscheck(usr.nick,"voice") then
+	    if msg:sub(5,#msg) == nil or msg:sub(5,#msg) == "" then
+		    irc:send("MODE "..channel.." +v "..usr.nick)
+		else
+		    irc:send("MODE "..channel.." +v "..msg:sub(5,#msg)
+		end
+		irc:sendChat(channel,"Done.")
+	else
+	    irc:sendChat(channel,"You do not have the required permissions.")
+	end
+end
+function devoice(user,channel,msg)
+    if permscheck(usr.nick,"devoice") then
+	    if msg:sub(5,#msg) == nil or msg:sub(5,#msg) == "" then
+		    irc:send("MODE "..channel.." -v "..usr.nick)
+		else
+		    irc:send("MODE "..channel.." -v "..msg:sub(5,#msg)
+		end
+		irc:sendChat(channel,"Done.")
+	else
+	    irc:sendChat(channel,"You do not have the required permissions.")
+	end
+end
 function quit(usr,channel,msg)
     run=permscheck(usr.nick,"quit")
 	if run == true then
@@ -195,6 +247,10 @@ add_module_command("core","+help",chelp)
 add_module_command("core","+list",list)
 add_module_command("core","+php",php)
 add_module_command("core","+modlist",modlist)
+add_module_command("core","+op",op)
+add_module_command("core","+deop",deop)
+add_module_command("core","+voice",voice)
+add_module_command("core","+devoice",devoice)
 function ctcp(usr, chan, msg)
   local response, command, ts
   local ctcpresponses = {
