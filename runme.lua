@@ -91,5 +91,6 @@ irc:think()
 irc:send("PING irc.freenode.net MitchAnnouncer")
 irc:hook("OnChat","Called whan a person chats",chatpcalled)
 irc:hook("OnChat","Called when a person chats",factoids)
+irc:hook("OnChat","ctcp",ctcp)
 sleep(2.5)
 end
