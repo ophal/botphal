@@ -18,12 +18,15 @@ irc:connect(config.server,config.serverPort,config.server)
 local sleep=require "socket".sleep
 print("[CONNECT] "..config.server..":"..config.serverPort)
 
+---
+sleep(5)
+-- --[[
+dofile("commands.lua")
+irc:hook("OnChat","ctcp",ctcp)
 for i=1,50 do
     irc:think()
 end
----
-sleep(5)
-
+-- ]]--
 for i=1,#config.autorun do
 	    irc:send(config.autorun[i])
 		sleep(0.2)
@@ -35,10 +38,7 @@ for i=1,#config.channels do
 		sleep(0.2)
     end
 end
--- --[[
-dofile("commands.lua")
-irc:hook("OnChat","ctcp",ctcp)
--- ]]--
+
 ---
 irc:think()
 dofile("perms.lua")
