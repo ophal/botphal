@@ -254,7 +254,7 @@ add_module_command("core","+devoice",devoice)
 function ctcp(usr, chan, msg)
   local response, command, ts
   local ctcpresponses = {
-    VERSION = "MitchBot v0.20",
+    VERSION = "MitchBot v0.50",
     CREDITS = "Started development by wolfmitchell (on freenode IRC), develCuy and mniip helped with alot of it also :D (Thank develCuy for helping with ctcp :D)",
     OWNER = "wolfmitchell", --Change depending on who the owner of the bot is :P
     FINGER = "He thought his life was going to take a turn for the better, but I knew the only turns one makes in life are the ones that take you the wrong way down a one-way street to nowhere, where U-turns aren't permitted before 8PM except for city buses.",
