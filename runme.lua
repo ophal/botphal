@@ -45,8 +45,16 @@ dofile("sandbox.lua")
 registered_modules = {}
 module_commands = {}
 function module_register(modulename)
-    table.insert(registered_modules,modulename)
-	module_commands[modulename] = {}
+    local exists=false
+    for i=1,#registered_modules do
+    	 if registered_modules[i] == modulename then
+    	 	exists=true
+    	 end
+    end
+    if exists==false then
+        table.insert(registered_modules,modulename)
+    end
+    module_commands[modulename] = {}
 end
 function add_module_command(modulename,command,callback)
     addbotcommand(command,callback,true)
