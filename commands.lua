@@ -37,7 +37,7 @@ function op(user,channel,msg)
 	    if msg:sub(5,#msg) == nil or msg:sub(5,#msg) == "" then
 		    irc:send("MODE "..channel.." +o "..usr.nick)
 		else
-		    irc:send("MODE "..channel.." +o "..msg:sub(5,#msg)
+		    irc:send("MODE "..channel.." +o "..msg:sub(5,#msg))
 		end
 		irc:sendChat(channel,"Done.")
 	else
