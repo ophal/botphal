@@ -134,6 +134,7 @@ function run(usr,channel,msg)
     run = permscheck(usr.nick,"run")
 	if run==true then
 	    returned="["..usr.nick.."] "
+	    exec=string.match(exec,"+run (.*)")
 		if exec then
 			s=sandbox_do(exec)
 			if e == nil then
