@@ -33,7 +33,7 @@ table.insert(permscommands,"deop:70")
 table.insert(permscommands,"voice:50")
 table.insert(permscommands,"devoice:50")
 function op(user,channel,msg)
-    if permscheck(usr.nick,"op") then
+    if permscheck(usr.host,"op") then
 	    if msg:sub(5,#msg) == nil or msg:sub(5,#msg) == "" then
 		    irc:send("MODE "..channel.." +o "..usr.nick)
 		else
@@ -45,11 +45,11 @@ function op(user,channel,msg)
 	end
 end
 function deop(user,channel,msg)
-    if permscheck(usr.nick,"deop") then
+    if permscheck(usr.host,"deop") then
 	    if msg:sub(5,#msg) == nil or msg:sub(5,#msg) == "" then
 		    irc:send("MODE "..channel.." -o "..usr.nick)
 		else
-		    irc:send("MODE "..channel.." -o "..msg:sub(5,#msg)
+		    irc:send("MODE "..channel.." -o "..msg:sub(5,#msg))
 		end
 		irc:sendChat(channel,"Done.")
 	else
@@ -57,11 +57,11 @@ function deop(user,channel,msg)
 	end
 end
 function voice(user,channel,msg)
-    if permscheck(usr.nick,"voice") then
+    if permscheck(usr.host,"voice") then
 	    if msg:sub(5,#msg) == nil or msg:sub(5,#msg) == "" then
 		    irc:send("MODE "..channel.." +v "..usr.nick)
 		else
-		    irc:send("MODE "..channel.." +v "..msg:sub(5,#msg)
+		    irc:send("MODE "..channel.." +v "..msg:sub(5,#msg))
 		end
 		irc:sendChat(channel,"Done.")
 	else
@@ -69,11 +69,11 @@ function voice(user,channel,msg)
 	end
 end
 function devoice(user,channel,msg)
-    if permscheck(usr.nick,"devoice") then
+    if permscheck(usr.host,"devoice") then
 	    if msg:sub(5,#msg) == nil or msg:sub(5,#msg) == "" then
 		    irc:send("MODE "..channel.." -v "..usr.nick)
 		else
-		    irc:send("MODE "..channel.." -v "..msg:sub(5,#msg)
+		    irc:send("MODE "..channel.." -v "..msg:sub(5,#msg))
 		end
 		irc:sendChat(channel,"Done.")
 	else
@@ -81,7 +81,7 @@ function devoice(user,channel,msg)
 	end
 end
 function quit(usr,channel,msg)
-    run=permscheck(usr.nick,"quit")
+    run=permscheck(usr.host,"quit")
 	if run == true then
 		irc:send("QUIT :Ordered by [".. usr.nick .."]")
     elseif not run then
@@ -98,7 +98,7 @@ function lua(usr,channel,msg)
             codeb=codeb .. " " .. codea[i]
 	    end
 	        exec,err = loadstring(codeb)
-        run = permscheck(usr.nick,"lua")
+        run = permscheck(usr.host,"lua")
 		if run==true then
             returned="["..usr.nick.."] "
 	        if not exec then
@@ -131,7 +131,7 @@ function run(usr,channel,msg)
     for i=2, #codea do
         codeb=codeb .. " " .. codea[i]
     end
-    run = permscheck(usr.nick,"run")
+    run = permscheck(usr.host,"run")
 	if run==true then
 	    returned="["..usr.nick.."] "
 	    exec=string.match(exec,"+run (.*)")
@@ -157,7 +157,7 @@ function reload(usr,channel,msg)
 	if data[2] == nil then
 	    irc:sendChat(channel,"["..usr.nick.."] Reloads a part of the bot. Requires permission level 80. Syntax: +reload <file>")
 	else
-	    run = permscheck(usr.nick,"reload")
+	    run = permscheck(usr.host,"reload")
 		if run == true then
 		    fileExists=exists(data[2]..".lua")
 			if fileExists == true then
@@ -197,7 +197,7 @@ function php(usr,channel,msg)
 	if params[2] == nil then
 	    irc:sendChat(channel,"["..usr.nick.."] Runs PHP code. Requires permsission level 90.")
 	else
-	    run=permscheck(usr.nick,"php")
+	    run=permscheck(usr.host,"php")
 		if run ~= true then
 		    irc:sendChat(channel,"You do not have the required permissions!")
 		else
