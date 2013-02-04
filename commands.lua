@@ -39,8 +39,8 @@ function op(user,channel,msg)
 		else
 		    irc:send("MODE "..channel.." +o "..msg:sub(5,#msg))
 		end
-		if channel:sub(1,1)=="#" then irc:sendChat(channel,"Done.") else irc:sendChat(usr.nick,"Done.")
-	elsee
+		if channel:sub(1,1)=="#" then irc:sendChat(channel,"Done.") else irc:sendChat(usr.nick,"Done.") end
+	else
 	    if channel:sub(1,1)=="#" then irc:sendChat(channel,"You do not have the required permissions.") else irc:sendChat(usr.nick,"You do not have the required permissions.") end
 	end
 end
