@@ -122,7 +122,7 @@ function lua(usr,channel,msg)
                 if channel:sub(1,1)=="#" then irc:sendChat(channel,returned) else irc:sendChat(usr.nick,returned) end
             elseif not run then
         		if channel:sub(1,1)=="#" then irc:sendChat(channel,"You do not have the required permissions!") else irc:sendChat(usr.nick,"You do not have the required permission.") end
-    end
+    end end
 end
 function run(usr,channel,msg)
     codea = splitString(msg," ")
