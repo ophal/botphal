@@ -13,7 +13,7 @@ function factoids(usr,channel,msg)
 		    if not sendText then
 		        irc:send("NOTICE "..usr.nick.." :Unknown fact.")
 		    else
-		        irc:sendChat(channel,sendText)
+		        if channel:sub(1,1)=="#" then irc:sendChat(channel,sendText) else irc:sendChat(usr.nick,sendText) end
 		    end
 	    end
 	end
@@ -26,7 +26,7 @@ function say(usr,channel,msg)
 	textannounce = ""
     textannounce=table.concat(announcement," ",2)
     textannounce1=textannounce
-	irc:sendChat(channel,textannounce1)
+	if channel:sub(1,1)=="#" then irc:sendChat(channel,textannounce1) else irc:sendChat(usr.nick,textannounce1) end
 end
 table.insert(permscommands,"op:70")
 table.insert(permscommands,"deop:70")
@@ -39,9 +39,9 @@ function op(user,channel,msg)
 		else
 		    irc:send("MODE "..channel.." +o "..msg:sub(5,#msg))
 		end
-		irc:sendChat(channel,"Done.")
-	else
-	    irc:sendChat(channel,"You do not have the required permissions.")
+		if channel:sub(1,1)=="#" then irc:sendChat(channel,"Done.") else irc:sendChat(usr.nick,"Done.")
+	elsee
+	    if channel:sub(1,1)=="#" then irc:sendChat(channel,"You do not have the required permissions.") else irc:sendChat(usr.nick,"You do not have the required permissions.") end
 	end
 end
 function deop(user,channel,msg)
@@ -51,9 +51,9 @@ function deop(user,channel,msg)
 		else
 		    irc:send("MODE "..channel.." -o "..msg:sub(5,#msg))
 		end
-		irc:sendChat(channel,"Done.")
+		if channel:sub(1,1)=="#" then irc:sendChat(channel,"Done.") else irc:sendChat(usr.nick,"Done.") end
 	else
-	    irc:sendChat(channel,"You do not have the required permissions.")
+	    if channel:sub(1,1)=="#" then irc:sendChat(channel,"You do not have the required permissions.") else irc:sendChat(usr.nick,"You do not have the required permissions.") end
 	end
 end
 function voice(user,channel,msg)
@@ -63,9 +63,9 @@ function voice(user,channel,msg)
 		else
 		    irc:send("MODE "..channel.." +v "..msg:sub(5,#msg))
 		end
-		irc:sendChat(channel,"Done.")
+		if channel:sub(1,1)=="#" then irc:sendChat(channel,"Done.") else irc:sendChat(usr.nick,"Done.") end
 	else
-	    irc:sendChat(channel,"You do not have the required permissions.")
+	    if channel:sub(1,1)=="#" then irc:sendChat(channel,"You do not have the required permissions.") else irc:sendChat(usr.nick,"You do not have the required permissions.") end
 	end
 end
 function devoice(user,channel,msg)
@@ -75,9 +75,9 @@ function devoice(user,channel,msg)
 		else
 		    irc:send("MODE "..channel.." -v "..msg:sub(5,#msg))
 		end
-		irc:sendChat(channel,"Done.")
+		if channel:sub(1,1)=="#" then irc:sendChat(channel,"Done.") else irc:sendChat(usr.nick,"Done.") end
 	else
-	    irc:sendChat(channel,"You do not have the required permissions.")
+	    if channel:sub(1,1)=="#" then irc:sendChat(channel,"You do not have the required permissions.") else irc:sendChat(usr.nick,"You do not have the required permissions.") end
 	end
 end
 function quit(usr,channel,msg)
@@ -85,14 +85,14 @@ function quit(usr,channel,msg)
 	if run == true then
 		irc:send("QUIT :Ordered by [".. usr.nick .."]")
     elseif not run then
-        irc:sendChat(channel,"You do not have the required permissions!")
+        if channel:sub(1,1)=="#" then irc:sendChat(channel,"You do not have the required permissions!") else irc:sendChat(usr.nick,"You do not have the required permissions.") end
     end
 end
 function lua(usr,channel,msg)
 	codea = splitString(msg," ")
     codeb = ""
 	if codea[2] == nil then
-	    irc:sendChat(channel,"["..usr.nick.."] Runs lua code. Requires user level 90.")
+	    if channel:sub(1,1)=="#" then irc:sendChat(channel,"["..usr.nick.."] Runs lua code. Requires user level 90.") else irc:sendChat(usr.nick,"Runs lua code. Requires user level 90.") end
 	else
   	    for i=2, #codea do
             codeb=codeb .. " " .. codea[i]
@@ -119,10 +119,9 @@ function lua(usr,channel,msg)
 					   	end
 					end
                 end
-                irc:sendChat(channel,returned)
+                if channel:sub(1,1)=="#" then irc:sendChat(channel,returned) else irc:sendChat(usr.nick,returned) end
             elseif not run then
-        		irc:sendChat(channel,"You do not have the required permissions!")
-	  	end
+        		if channel:sub(1,1)=="#" then irc:sendChat(channel,"You do not have the required permissions!") else irc:sendChat(usr.nick,"You do not have the required permission.") end
     end
 end
 function run(usr,channel,msg)
@@ -147,40 +146,40 @@ function run(usr,channel,msg)
 				end
 			end
 		end
-        irc:sendChat(channel,returned)
+        if channel:sub(1,1)=="#" then irc:sendChat(channel,returned) else irc:sendChat(usr.nick,returned) end
     elseif not run then
-        irc:sendChat(channel,"You do not have the required permissions!")
+        if channel:sub(1,1)=="#" then irc:sendChat(channel,"You do not have the required permissions!") else irc:sendChat(usr.nick,"You do not have the required permissions!") end
     end
 end
 function reload(usr,channel,msg)
 	data=splitString(msg," ")
 	if data[2] == nil then
-	    irc:sendChat(channel,"["..usr.nick.."] Reloads a part of the bot. Requires permission level 80. Syntax: +reload <file>")
+	    if channel:sub(1,1)=="#" then irc:sendChat(channel,"["..usr.nick.."] Reloads a part of the bot. Requires permission level 80. Syntax: +reload <file>") else irc:sendChat(usr.nick,"Reloads a part of the bot. Requires permission level 80. Syntax: +reload <file>") end
 	else
 	    run = permscheck(usr.host,"reload")
 		if run == true then
 		    fileExists=exists(data[2]..".lua")
 			if fileExists == true then
 			    dofile(data[2]..".lua")
-				irc:sendChat(channel,"["..usr.nick.."] The file "..data[2]..".lua has been reloaded.")
+				if channel:sub(1,1)=="#" then irc:sendChat(channel,"["..usr.nick.."] The file "..data[2]..".lua has been reloaded.") else irc:sendChat(usr.nick,"["..usr.nick.."] The file "..data[2]..".lua has been reloaded.") end
 	    	else
-			    irc:sendChat(channel,"["..usr.nick.."] That file does not exist!")
+			    if channel:sub(1,1)=="#" then irc:sendChat(channel,"["..usr.nick.."] That file does not exist!") else irc:sendChat(usr.nick,"["..usr.nick.."] That file does not exist") end
 			end
 		else
-		    irc:sendChat(channel,"You do not have the required permissions!")
+		    if channel:sub(1,1)=="#" then irc:sendChat(channel,"You do not have the required permissions!") else irc:sendChat("You do not have the required permissions.") end
 		end
 	end
 end
 function chelp(usr,channel,msg)
 	params=splitString(msg," ")
     if params[2] == nil then
-	    irc:sendChat(channel,"["..usr.nick.."] Usage: +help <command>. Use +list for a command list.")
+	    if channel:sub(1,1)=="#" then irc:sendChat(channel,"["..usr.nick.."] Usage: +help <command>. Use +list for a command list.") else irc:sendChat(usr.nick,"["..usr.nick.."] Usage: +help <command>. Use +list for a command list.") end
 	else
 	    helpl=getHelpTable(params[2])
 	    if helpl == nil then
-		    irc:sendChat(channel,"["..usr.nick.."] Sorry, no help documents were found on that command.")
+		    if channel:sub(1,1)=="#" then irc:sendChat(channel,"["..usr.nick.."] Sorry, no help documents were found on that command.") else irc:sendChat(usr.nick,"["..usr.nick.."] Sorry, no help documents were found on that command.") end
 		else
-			irc:sendChat(channel,"["..usr.nick.."] "..helpl[1]..": "..helpl[2].."|| Syntax: "..helpl[3].."|| Requires user level "..helpl[4]..".")
+			if channel:sub(1,1)=="#" then irc:sendChat(channel,"["..usr.nick.."] "..helpl[1]..": "..helpl[2].."|| Syntax: "..helpl[3].."|| Requires user level "..helpl[4]..".") else irc:sendChat(usr.nick,"["..usr.nick.."] "..helpl[1]..": "..helpl[2].."|| Syntax: "..helpl[3].."|| Requires user level "..helpl[4]..".") end
 		end
 	end
 end
@@ -195,11 +194,11 @@ end
 function php(usr,channel,msg)
 	params=splitString(msg," ")
 	if params[2] == nil then
-	    irc:sendChat(channel,"["..usr.nick.."] Runs PHP code. Requires permsission level 90.")
+	    if channel:sub(1,1)=="#" then irc:sendChat(channel,"["..usr.nick.."] Runs PHP code. Requires permsission level 90.") else  irc:sendChat(usr.nick,"["..usr.nick.."] Runs PHP code. Requires permsission level 90.") end
 	else
 	    run=permscheck(usr.host,"php")
 		if run ~= true then
-		    irc:sendChat(channel,"You do not have the required permissions!")
+		    if channel:sub(1,1)=="#" then irc:sendChat(channel,"You do not have the required permissions!") else irc:sendChat(usr.nick,"You do not have the required permissions!") end
 		else
 		    params2=""
 			for i=2,#params do
@@ -214,7 +213,7 @@ function php(usr,channel,msg)
 end
 function modlist(usr,channel,msg)
     modulelist=table.concat(registered_modules," ")
-	irc:sendChat(channel,modulelist)
+	if channel:sub(1,1)=="#" then irc:sendChat(channel,modulelist) else irc:sendChat(usr.nick,modulelist) end
 end
 
 enabled_commands = {}
@@ -224,7 +223,7 @@ function chat(usr,channel,msg)
     	for k,v in pairs(enabled_commands) do
 	        if message[1] == k then v(usr,channel,msg) validcmd = true end
     	end
-		if validcmd == false or validcmd == nil then irc:sendChat(channel,"Sorry, that is not a valid command.") end
+		if validcmd == false or validcmd == nil then if channel:sub(1,1)=="#" then irc:sendChat(channel,"Sorry, that is not a valid command.") else irc:sendChat(usr.nick,"Sorry, that is not a valid command.") end end
 		validcmd = nil
 	end
 	log_write("["..channel.."] {"..os.date().."} <"..usr.nick.."> "..msg)
