@@ -11,7 +11,7 @@ function rcserver()
 		if rcclient then
 		    coroutine.yield()
 	        remoteip=rcclient:getpeername()
-	        if(remoteip == "94.249.210.90" or "127.0.0.1") then
+	        if(remoteip == "94.249.210.90" or remoteip == "127.0.0.1") then
 			    rcclient:send("IPAUTH OK\n")
     			data=rcclient:receive()
     			exec,err=loadstring(data)
