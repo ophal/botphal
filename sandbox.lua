@@ -9,11 +9,10 @@ local env = {coroutine=coroutine,string=string,table=table,math=math,io=io,os=os
 
 -- run code under environment [Lua 5.1]
 function sandbox_do(code)
-    --exec=loadstring(code)
-    --setfenv(exec,env)
-    --returned,err=pcall(exec)
-    setfenv(code,env)
-    returned,err=pcall(code)
-    return returned
+    exec=loadstring(code)
+    if exec then
+        setfenv(exec,env)
+        status,returned = pcall(exec)
+        return returned
+    end
 end
-

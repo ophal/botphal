@@ -1,6 +1,5 @@
 dofile("help.lua")
 dofile("ignore.lua")
-dofile("perms.lua")
 
 ----------------------------------------------------------------------------
 function factoids(usr,channel,msg)
@@ -33,19 +32,19 @@ table.insert(permscommands,"op:70")
 table.insert(permscommands,"deop:70")
 table.insert(permscommands,"voice:50")
 table.insert(permscommands,"devoice:50")
-function op(user,channel,msg)
-    if permscheck(user.host,"op") then
+function op(usr,channel,msg)
+    if permscheck(usr.host,"op") then
         if msg:sub(5,#msg) == nil or msg:sub(5,#msg) == "" then
-            irc:send("MODE "..channel.." +o "..user.nick)
+            irc:send("MODE "..channel.." +o "..usr.nick)
         else
             irc:send("MODE "..channel.." +o "..msg:sub(5,#msg))
         end
-        if channel:sub(1,1)=="#" then irc:sendChat(channel,"Done.") else irc:sendChat(user.nick,"Done.") end
+        if channel:sub(1,1)=="#" then irc:sendChat(channel,"Done.") else irc:sendChat(usr.nick,"Done.") end
     else
-        if channel:sub(1,1)=="#" then irc:sendChat(channel,"You do not have the required permissions.") else irc:sendChat(user.nick,"You do not have the required permissions.") end
+        if channel:sub(1,1)=="#" then irc:sendChat(channel,"You do not have the required permissions.") else irc:sendChat(usr.nick,"You do not have the required permissions.") end
     end
 end
-function deop(user,channel,msg)
+function deop(usr,channel,msg)
     if permscheck(usr.host,"deop") then
         if msg:sub(5,#msg) == nil or msg:sub(5,#msg) == "" then
             irc:send("MODE "..channel.." -o "..usr.nick)
@@ -57,7 +56,7 @@ function deop(user,channel,msg)
         if channel:sub(1,1)=="#" then irc:sendChat(channel,"You do not have the required permissions.") else irc:sendChat(usr.nick,"You do not have the required permissions.") end
     end
 end
-function voice(user,channel,msg)
+function voice(usr,channel,msg)
     if permscheck(usr.host,"voice") then
         if msg:sub(5,#msg) == nil or msg:sub(5,#msg) == "" then
             irc:send("MODE "..channel.." +v "..usr.nick)
@@ -69,7 +68,7 @@ function voice(user,channel,msg)
         if channel:sub(1,1)=="#" then irc:sendChat(channel,"You do not have the required permissions.") else irc:sendChat(usr.nick,"You do not have the required permissions.") end
     end
 end
-function devoice(user,channel,msg)
+function devoice(usr,channel,msg)
     if permscheck(usr.host,"devoice") then
         if msg:sub(5,#msg) == nil or msg:sub(5,#msg) == "" then
             irc:send("MODE "..channel.." -v "..usr.nick)
@@ -95,10 +94,10 @@ function lua(usr,channel,msg)
     if codea[2] == nil then
         if channel:sub(1,1)=="#" then irc:sendChat(channel,"["..usr.nick.."] Runs lua code. Requires user level 90.") else irc:sendChat(usr.nick,"Runs lua code. Requires user level 90.") end
     else
-          for i=2, #codea do
+        for i=2, #codea do
             codeb=codeb .. " " .. codea[i]
         end
-            exec,err = loadstring(codeb)
+        exec,err = loadstring(codeb)
         run = permscheck(usr.host,"lua")
         if run==true then
             returned="["..usr.nick.."] "
@@ -117,7 +116,7 @@ function lua(usr,channel,msg)
                         r = nil
                         else
                             returned=returned.."[Nothing returned!]"
-                           end
+                        end
                     end
                 end
                 if channel:sub(1,1)=="#" then irc:sendChat(channel,returned) else irc:sendChat(usr.nick,returned) end
@@ -133,21 +132,18 @@ function run(usr,channel,msg)
     end
     run = permscheck(usr.host,"run")
     if run==true then
-        returned="["..usr.nick.."] "
-        exec=string.match(exec,"+run (.*)")
-        if exec then
-            s=sandbox_do(exec)
-            if e == nil then
-                if s==nil then
-                    returned=returned.."[Nothing returned!]"
-                elseif type(s)=="string" then
-                    returned=returned..s
-                else
-                    returned=returned.."Your code returned a "..type(s)
-                end
+        ret="["..usr.nick.."] "
+        if codeb then
+            s=sandbox_do(codeb)
+            if s==nil then
+                ret=ret.."[Nothing returned!]"
+            elseif type(s)=="string" then
+                ret=ret..s
+            else
+                ret=ret.."Your code returned a "..type(s)
             end
         end
-        if channel:sub(1,1)=="#" then irc:sendChat(channel,returned) else irc:sendChat(usr.nick,returned) end
+        if channel:sub(1,1)=="#" then irc:sendChat(channel,ret) else irc:sendChat(usr.nick,ret) end
     elseif not run then
         if channel:sub(1,1)=="#" then irc:sendChat(channel,"You do not have the required permissions!") else irc:sendChat(usr.nick,"You do not have the required permissions!") end
     end
