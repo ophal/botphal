@@ -1,1 +1,0 @@
-print("Example module successfully loaded.")
