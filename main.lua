@@ -1,13 +1,5 @@
 require"irc.init"
-dofile("json.lua")
 
-if os.getenv("HOME") then
-	print("I have detected you are on linux version '"..io.popen("uname -srm","r"):read'*a'.."'.")
-	linux=true
-else
-    print("I have detected you are on windows. The filesystem sandbox will not be enbled.")
-	linux=false
-end
 config={}
 dofile("config.lua")
 --[[
@@ -48,7 +40,7 @@ function commandEngine(usr,chan,msg)
 	args=explode(msg," ")
 	called=false
 	for k,v in pairs(commands) do
-		if msg:sub(1,#config.cmdchar..k)==config.cmdchar..k and string.match(msg,config.cmdchar..k) then
+		if msg:sub(1,#config.cmdchar..k)==config.cmdchar..k then
 			if users[usr.host].perms[v.level]==true or users[usr.host].perms["owner"]==true then
 				send=v.func(usr,chan,msg,args)
 				irc:sendChat(chan,send)
@@ -64,6 +56,9 @@ function commandEngine(usr,chan,msg)
 	end
 end
 function sleep(sec) socket.select(nil,nil,sec) end
+function debug_raw(line) print(line) end
+if config.debug then  irc:hook("OnLine","[CORE/DEBUG] raw debug hook",debug_raw) end
+
 ircuser={}
 ircuser.username=config.username
 ircuser.nick=config.nickname
