@@ -17,7 +17,6 @@ json=dofile("json.lua")
 ]]--
 
 users={}
-commands={}
 function split(str, pat) -- from lua-users wiki
    local t = {}  -- NOTE: use {n = 0} in Lua-5.0
    local fpat = "(.-)" .. pat
