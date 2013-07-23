@@ -1,0 +1,4 @@
+Thanks to...
+	JakobOvrum for LuaIRC, which is the core of the bot
+	Jeffrey Friedl for json.lua, used to store some data like users in the bot
+	lua-users wiki for sha256.lua, used to encrypt the passwords for the users DB
