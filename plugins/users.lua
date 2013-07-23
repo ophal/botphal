@@ -4,16 +4,17 @@ function register(usr,chan,msg,args)
 	if not args[3] then
 		return "usr",string.format("%s: Arguments for command 'register': %s <username> <password>",usr.nick,args[1])
 	else
-		userdbfile=io.open("users.json","rw")
+		userdbfile=io.open("users.json","r")
 		userdb=json:decode(userdbfile:read'*a')
 		userdb[args[2]]={}
 		userdb[args[2]].password,userdb[args[2]].salt=hash(args[3])
 		userdb[args[2]].perms={}
 		userdb[args[2]].perms[""]=true
 		userdbjson=json:encode(userdb)
+		userdbfile=io.open("users.json","w")
 		userdbfile:write(userdbjson)
 		userdbfile:close()
-		return "\22Done!"
+		return "usr","Done!"
 	end
 end
 function login(usr,chan,msg,args)
