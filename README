@@ -1,0 +1,7 @@
+Setup:
+git clone https://github.com/JakobOvrun/LuaIRC.git
+mv LuaIRC irc
+cp config.* config.lua
+nano config.lua # edit the config!
+
+Running: lua main.lua
