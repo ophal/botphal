@@ -1,6 +1,7 @@
 Setup:
-git clone https://github.com/JakobOvrun/LuaIRC.git
-mv LuaIRC irc
+git clone https://github.com/JakobOvrun/LuaIRC.git irc
+cd irc
+git checkout -b ad53b2aeb1d347e05711ef6af0c48406fc1078ec ad53b2aeb1d347e05711ef6af0c48406fc1078ec # because newest version is broken
 cp config.* config.lua
 nano config.lua # edit the config!
 
