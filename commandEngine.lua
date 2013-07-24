@@ -8,6 +8,7 @@ function addcommand(commandName,commandFunc,commandPerms)
 	commands[commandName].level=commandPerms
 end
 function commandEngine(usr,chan,msg)
+	if chan:sub(1,1)=="#" then target=chan else target=usr.nick end
 	if not users[usr.host] then users[usr.host]={} users[usr.host].identified=false users[usr.host].perms={} users[usr.host].perms[""]=true end
 	print(string.format("[MESSAGE]\t[%s][%s]<%s> %s",os.date(),chan,usr.nick,msg))
 	called=false
@@ -19,16 +20,16 @@ function commandEngine(usr,chan,msg)
 			if users[usr.host].perms[commands[cmd].level]==true or users[usr.host].perms["owner"]==true then
 				status,target,send=pcall(commands[cmd].func,usr,chan,msg,args)
 				if not status then 
-					print(string.format("[ERROR]\t%s",split(target,"\n")[1]))
+					print(string.format("[ERROR]\t\t%s",split(target,"\n")[1]))
 					if chan:sub(1,1)=="#" then irc:sendChat(chan,split(target,"\n")[1]) else irc:sendChat(usr.nick,split(target,"\n")[1]) end
 				else
 					if target=="usr" then irc:sendChat(usr.nick,send) elseif target=="chan" then irc:sendChat(chan,send) end
 				end
 			else
-				irc:sendChat(chan,string.format("%s, you do not have the required permissions for the command %q. You need the %q capability to use this.",usr.nick,cmd,commands[cmd].level))
+				irc:sendChat(target,string.format("%s, you do not have the required permissions for the command %q. You need the %q capability to use this.",usr.nick,cmd,commands[cmd].level))
 			end
 		else
-				irc:sendChat(chan,string.format("%s, the command %q does not exist.",usr.nick,cmd))
+				irc:sendChat(target,string.format("%s, the command %q does not exist.",usr.nick,cmd))
 		end
 	end
 end
