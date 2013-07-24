@@ -2,8 +2,9 @@
 function hash(pass,salt)
 	if not salt then 
 		salt=""
-		for i=1,math.random(0,10) do
+		for i=1,math.random(0,5) do
 			salt=salt..string.char(math.random(65,122))
+			sleep(1)
 		end
 	end
 	hashed=sha256.hash256(pass..salt)
@@ -26,7 +27,7 @@ function register(usr,chan,msg,args)
 		userdb[args[1]].perms={}
 		userdb[args[1]].perms[""]=true
 		userdb[args[1]].name=args[1]
-		userdbjson=json:encode(userdb)
+		userdbjson=json:encode_pretty(userdb)
 		userdbfile=io.open("users.json","w")
 		userdbfile:write(userdbjson)
 		userdbfile:close()

@@ -59,6 +59,19 @@ end
 for i=1,50 do irc:think() end
 irc:hook("OnChat","[CORE] Main command engine",commandEngine)
 started=true
+s,apr=pcall(function() return require"apr" end)
+function SIGHUP() 
+	_,err=pcall(function() dofile"load.lua" end) 
+	print("SIGHUP received, reloaded.") 
+	if err then 
+		print("[ERROR]\t\t"..err) 
+	end
+end
+if s==true then
+	print("Apache Portable Runtime loaded, will catch SIGHUP to reload and SIGTERM to exit.")
+	apr.signal("SIGHUP",SIGHUP)
+	--apr.signal("SIGTERM",function() os.exit() end)
+end
 while irc do
 	irc:think()
 	sleep(0.2)
