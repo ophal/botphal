@@ -9,7 +9,7 @@ function lua(usr,chan,msg,args)
         local func,err=loadstring(code)
         if err then return target,usr.nick..": "..err end
         local asdf,ret=pcall(func) asdf=nil
-        ret = tostring(ret) or "No output"
+        ret = tostring(ret):gsub("\n","\\n") or "No output"
         return target,usr.nick..": "..ret 
 end 
 function jumpOffACliff(usr,chan,msg,args)

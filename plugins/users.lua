@@ -35,7 +35,7 @@ function register(usr,chan,msg,args)
 	end
 end
 function login(usr,chan,msg,args)
-	if chan:sub(1,1)=="#" then return "chan",string.format("%s: Are you kidding me? You just sent your password in a channel! Try again in PM.") end
+	if chan:sub(1,1)=="#" then return "chan",string.format("%s: Are you kidding me? You just sent your password in a channel! Try again in PM.",usr.nick) end
 	if not args[2] then
 		return "usr",string.format("%s: Arguments for command 'login': %s <username> <password>",usr.nick,config.cmdchar.."login")
 	else
