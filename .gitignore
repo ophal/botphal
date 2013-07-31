@@ -1,3 +1,4 @@
 config.lua
 irc/
 *.json
+plugins/noping.lua # Just a quick hacked up plugin to report to the channel ops of a channel whenever someone spam pinged me in a channel...

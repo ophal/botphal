@@ -4,7 +4,7 @@ function hash(pass,salt)
 		salt=""
 		for i=1,math.random(0,5) do
 			salt=salt..string.char(math.random(65,122))
-			sleep(1)
+			--sleep(1)
 		end
 	end
 	hashed=sha256.hash256(pass..salt)
